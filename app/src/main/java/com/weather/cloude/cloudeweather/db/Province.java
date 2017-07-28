@@ -4,7 +4,7 @@ package com.weather.cloude.cloudeweather.db;
  * Created by Administrator on 2017/7/28.
  */
 
-public class Province {
+public class Province extends DataSupport {
     private int id;
     private String provinceName;
     private int provinceCode;

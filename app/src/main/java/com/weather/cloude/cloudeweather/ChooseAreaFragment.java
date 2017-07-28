@@ -31,7 +31,7 @@ import java.util.List;
  * Created by Administrator on 2017/7/28.
  */
 
-@RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+
 public class ChooseAreaFragment extends Fragment {
     public static final int LEVE_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
@@ -96,7 +96,7 @@ public class ChooseAreaFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClic(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (currentLevel == LEVE_PROVINCE) {
                     selectedProvince = provinceList.get(position);
                     queryCities();
@@ -177,13 +177,13 @@ public class ChooseAreaFragment extends Fragment {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
             String address = "http://guolin.tech/api/china" + provinceCode +"/" + cityCode;
-            queryFormServer(address,"county");
+            queryFromServer(address,"county");
         }
     }
     /**
      * 根据传入的地址和类型从服务器上查询省市县数据
      */
-    private void queryForServer(String address,final String type){
+    private void queryFromServer(String address,final String type){
         showProgressDialog();
         HttpUtil.sendOkHttpRequest(address, new Callback(){
             @Override
@@ -214,7 +214,7 @@ public class ChooseAreaFragment extends Fragment {
                     });
                 }
             }
-            @Override
+        @Override
             public void onFailure(Call call,IOException e){
                 // 通过 runOnUiThread()方法会回主线程处理逻辑
                 getActivity().runOnUiThread(new Runnable() {
@@ -230,7 +230,7 @@ public class ChooseAreaFragment extends Fragment {
     /**
      * 显示进度对话框
      */
-    private  void showPeogressDialog(){
+    private  void showProgressDialog(){
         if(progressDialog ==null){
             progressDialog = new ProgressDialog(getActivity());
             progressDialog.setMessage("正在加载...");

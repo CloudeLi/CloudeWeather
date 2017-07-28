@@ -4,7 +4,7 @@ package com.weather.cloude.cloudeweather.db;
  * Created by Administrator on 2017/7/28.
  */
 
-public class City {
+public class City  extends DataSupport{
     private int id;
     private String cityName;
     private int cityCode;

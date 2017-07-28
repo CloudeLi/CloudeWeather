@@ -4,7 +4,7 @@ package com.weather.cloude.cloudeweather.db;
  * Created by Administrator on 2017/7/28.
  */
 
-public class County {
+public class County extends DataSupport{
     private int id;
     private String countyName;
     private String weatherId;
