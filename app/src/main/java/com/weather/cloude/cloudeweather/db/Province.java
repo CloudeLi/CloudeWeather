@@ -7,7 +7,7 @@ package com.weather.cloude.cloudeweather.db;
 public class Province {
     private int id;
     private String provinceName;
-    private int provinceClde;
+    private int provinceCode;
     public int getId(){
         return id;
 
@@ -23,10 +23,12 @@ public class Province {
     public  void setProvinceName(String provinceName){
         this.provinceName = provinceName;
     }
-    public  int getProvinceClde(){
-        return getProvinceClde();
+    public  int getProvinceCode(){
+        return getProvinceCode();
     }
-    public  void setProvinceClde(){
-        this.provinceClde = provinceClde;
+    public  void setProvinceCode(int provinceClde){
+        this.provinceCode = provinceCode;
     }
+
+
 }

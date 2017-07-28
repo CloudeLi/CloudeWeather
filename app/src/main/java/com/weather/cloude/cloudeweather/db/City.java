@@ -34,11 +34,9 @@ public class City {
         this.cityCode = cityCode;
     }
 
-    public int getProvinceID() {
-        return provinceID;
-    }
-
     public void setProvinceID(int provinceID) {
         this.provinceID = provinceID;
     }
+
+
 }
