@@ -1,0 +1,10 @@
+<litepal>
+    <dbname value="cloudeWaether"/>
+    <version value="1"/>
+    <list>
+        <mapping class="com.weather.cloude.cloudeweather.db.Province"/>
+        <mapping class="com.weather.cloude.cloudeweather.db.City"/>
+        <mapping class="com.weather.cloude.cloudeweather.db.County"/>
+
+    </list>
+    </litepal>

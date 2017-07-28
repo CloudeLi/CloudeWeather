@@ -7,6 +7,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
 
+        compile fileTree(dir:'libs',include:['*.jar'])
+        compile 'com.android.support:appcompat-v7:24.2.1'
+        testComplie 'junit:junit:4.12'
+        compile 'org.litepal.android:core:1.4.1'
+        complie 'com.squareup.okhttp3:okhttp:3.4.1'
+        complie 'com.google.code.gson:gson:2.7'
+        complie 'com.github.bumptech.glide:glide:3.7.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
