@@ -22,10 +22,17 @@ import com.weather.cloude.cloudeweather.db.Province;
 import com.weather.cloude.cloudeweather.util.HttpUtil;
 import com.weather.cloude.cloudeweather.util.Utility;
 
+import org.litepal.crud.DataSupport;
+
 import java.io.IOException;
 import java.net.ResponseCache;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 
 /**
  * Created by Administrator on 2017/7/28.
@@ -41,7 +48,7 @@ public class ChooseAreaFragment extends Fragment {
     private Button backButton;
     private ListView listView;
     private ArrayAdapter<String> adapter;
-    private List<String> dataList = new ArrayList();
+    private List<String> dataList = new ArrayList<>();
 
     /**
      * 省列表
@@ -79,9 +86,9 @@ public class ChooseAreaFragment extends Fragment {
     private int currentLevel;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
@@ -92,7 +99,7 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -139,7 +146,7 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
     /**
-     * 查询选中的省内所有的市，有现从数据库查询，如果没有查询到再去服务器上查询
+     * 查询选中的省内所有的市，优先从数据库查询，如果没有查询到再去服务器上查询
      */
     private void queryCities(){
         titleText.setText(selectedProvince.getProvinceName());
@@ -147,26 +154,32 @@ public class ChooseAreaFragment extends Fragment {
         cityList = DataSupport.where("provinceid = ?",String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
-            for(City city:cityList){
+            for(City city :cityList){
                 dataList.add(city.getCityName());
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
             currentLevel = LEVEL_CITY;
+
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
-            String address = "http://guolin.tech/api/china"+ provinceCode;
+
+            String address ="http://guolin.tech/api/china/"+provinceCode;
+            queryFromServer(address,"city");
+            Toast toast = Toast.makeText(getContext(),address,Toast.LENGTH_SHORT);
+            toast.show();
+
         }
     }
     /**
-     * 查询选中市内所有的县，有限从数据库查询，如果没有查询到再去服务器上查询
+     * 查询选中市内所有的县，优先从数据库查询，如果没有查询到再去服务器上查询
      */
     private void queryCounties(){
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList = DataSupport.where("cityid = ? " ,String.valueOf(selectedCity.getId().find(County.class)));
+        countyList = DataSupport.where("cityid = ? " ,String.valueOf(selectedCity.getId())).find(County.class);
         if(countyList.size()>0){
-            dataList.clear();;
+            dataList.clear();
             for (County county : countyList){
                 dataList.add(county.getCountyName());
             }
@@ -176,7 +189,7 @@ public class ChooseAreaFragment extends Fragment {
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
-            String address = "http://guolin.tech/api/china" + provinceCode +"/" + cityCode;
+            String address = "http://guolin.tech/api/china/" + provinceCode +"/4" + cityCode;
             queryFromServer(address,"county");
         }
     }
@@ -191,7 +204,7 @@ public class ChooseAreaFragment extends Fragment {
                 String responseText = response.body().string();
                 boolean result = false;
                 if ("province".equals(type)){
-                    result = Utility.handlePeovinceResponse(responseText);
+                    result = Utility.handleProvinceResponse(responseText);
                 }else if ("city".equals(type)){
                     result = Utility.handleCityResponse(responseText,selectedProvince.getId());
                 }else if ("county".equals(type)){

@@ -1,5 +1,8 @@
 package com.weather.cloude.cloudeweather.util;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+
 /**
  * Created by Administrator on 2017/7/28.
  */

@@ -1,6 +1,7 @@
 package com.weather.cloude.cloudeweather.util;
 
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.weather.cloude.cloudeweather.db.City;
 import com.weather.cloude.cloudeweather.db.County;
@@ -21,11 +22,11 @@ public class Utility {
      * 解析和处理服务器返回的省级数据
      */
 
-    public static boolean handlePeovinceResponse(String response) {
+    public static boolean handleProvinceResponse(String response) {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allProvinces = new JSONArray(response);
-                for (int i = 0; i < allProvinces.length(); i++) {
+                for (int i= 0; i <allProvinces.length();i++){
                     JSONObject provinceObject = allProvinces.getJSONObject(i);
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
@@ -53,7 +54,7 @@ public class Utility {
                     City city = new City();
                     city.setCityName(cityObject.getString("name"));
                     city.setCityCode(cityObject.getInt("id"));
-                    city.setProvinceID(provinceId);
+                    city.setProvinceId(provinceId);
                     city.save();
                 }
                 return true;
