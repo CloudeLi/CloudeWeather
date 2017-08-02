@@ -1,5 +1,6 @@
 package com.weather.cloude.cloudeweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.weather.cloude.cloudeweather.gson.Forecast;
 import com.weather.cloude.cloudeweather.gson.Weather;
+import com.weather.cloude.cloudeweather.service.AutoUpdateService;
 import com.weather.cloude.cloudeweather.util.HttpUtil;
 import com.weather.cloude.cloudeweather.util.Utility;
 
@@ -117,7 +119,7 @@ public class WeatherActivity extends AppCompatActivity {
      * @param weatherId
      */
     void requestWeather(final String weatherId) {
-        String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=bc0418b57b2d4918819d3974ac1285d9";
+        String weatherUrl = "http://guolin.tech/api/weather?cityid="+weatherId+"&key=e2da1657e0e041b384b1380f8e553daa";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
         public void onResponse(Call call, Response response) throws IOException {
@@ -186,7 +188,7 @@ public class WeatherActivity extends AppCompatActivity {
      * @param weather
      */
     private void showWeatherInfo(Weather weather) {
-        String cityName = weather.basic.cityName;
+        if(weather!=null&& "ok".equals(weather.status)){String cityName = weather.basic.cityName;
         String updateTime = "更新时间："+weather.basic.update.updateTime.split(" ")[1];
         String degree = weather.now.temperature+"℃";
         String weatherInfo = weather.now.more.info;
@@ -218,5 +220,12 @@ public class WeatherActivity extends AppCompatActivity {
         sportText.setText(sport);
         carWashText.setText(carWash);
         weatherLayout.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(this, AutoUpdateService.class);
+            startService(intent);
+
+        }else {
+            Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

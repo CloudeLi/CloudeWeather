@@ -183,8 +183,8 @@ public class ChooseAreaFragment extends Fragment {
             int provinceCode = selectedProvince.getProvinceCode();
             String address ="http://guolin.tech/api/china/"+provinceCode;
                 queryFromServer(address, "city");
-                /*Toast toast = Toast.makeText(getContext(), address, Toast.LENGTH_SHORT);
-                toast.show();*/
+                Toast toast = Toast.makeText(getContext(), address, Toast.LENGTH_SHORT);
+                toast.show();
 
 
         }
