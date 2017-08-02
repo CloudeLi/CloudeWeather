@@ -2,6 +2,7 @@ package com.weather.cloude.cloudeweather;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.net.ResponseCache;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,8 +112,14 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if (currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
-            }
+             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +151,9 @@ public class ChooseAreaFragment extends Fragment {
         }else {
             String address = "http://guolin.tech/api/china";
             queryFromServer(address,"province");
+            /*String address = "https://api.seniverse.com/v3/weather/now.json?location=beijing&ts=1443079775&ttl=30&uid=U6E1381C76&sig=evhhgk1uubfex4lb&callback=showWeather";
+            queryFromServer(address,"province");*/
+
         }
     }
     /**
@@ -163,11 +174,11 @@ public class ChooseAreaFragment extends Fragment {
 
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
-
             String address ="http://guolin.tech/api/china/"+provinceCode;
-            queryFromServer(address,"city");
-            Toast toast = Toast.makeText(getContext(),address,Toast.LENGTH_SHORT);
-            toast.show();
+                queryFromServer(address, "city");
+                Toast toast = Toast.makeText(getContext(), address, Toast.LENGTH_SHORT);
+                toast.show();
+
 
         }
     }
@@ -189,7 +200,7 @@ public class ChooseAreaFragment extends Fragment {
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
-            String address = "http://guolin.tech/api/china/" + provinceCode +"/4" + cityCode;
+            String address = "http://guolin.tech/api/china/" + provinceCode +"/" + cityCode;
             queryFromServer(address,"county");
         }
     }
@@ -208,8 +219,7 @@ public class ChooseAreaFragment extends Fragment {
                 }else if ("city".equals(type)){
                     result = Utility.handleCityResponse(responseText,selectedProvince.getId());
                 }else if ("county".equals(type)){
-                    result = Utility.handleCountyResponse(responseText,
-                    selectedCity.getId());
+                    result = Utility.handleCountyResponse(responseText,selectedCity.getId());
                 }
                 if (result) {
                     getActivity().runOnUiThread(new Runnable() {
